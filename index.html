@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>শুভ সকাল — Good Morning</title>
+    <style>
+        :root {
+            --bg1: #0ea5e9;
+            /* sky-500 */
+            --bg2: #22c55e;
+            /* green-500 */
+            --card: #ffffffee;
+            --text: #0f172a;
+            /* slate-900 */
+            --muted: #334155;
+            /* slate-700 */
+            --accent: #f59e0b;
+            /* amber-500 */
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            margin: 0;
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+            color: var(--text);
+            background: linear-gradient(120deg, var(--bg1), var(--bg2));
+            background-size: 200% 200%;
+            animation: bg 12s ease-in-out infinite;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+        }
+
+        @keyframes bg {
+            0% {
+                background-position: 0% 50%
+            }
+
+            50% {
+                background-position: 100% 50%
+            }
+
+            100% {
+                background-position: 0% 50%
+            }
+        }
+
+        .card {
+            width: min(680px, 92vw);
+            background: var(--card);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .15);
+            padding: 28px;
+            backdrop-filter: blur(8px);
+        }
+
+        .title {
+            font-size: clamp(28px, 5vw, 56px);
+            line-height: 1.1;
+            margin: 8px 0 6px;
+        }
+
+        .subtitle {
+            font-size: clamp(14px, 2.5vw, 18px);
+            color: var(--muted);
+            margin: 0 0 14px;
+        }
+
+        .clock {
+            font-variant-numeric: tabular-nums;
+            font-size: clamp(16px, 3vw, 22px);
+            letter-spacing: .5px;
+            color: #0b4b33;
+            margin-bottom: 14px;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        button,
+        a.btn {
+            appearance: none;
+            border: 0;
+            cursor: pointer;
+            text-decoration: none;
+            padding: 12px 16px;
+            border-radius: 999px;
+            font-weight: 600;
+            transition: transform .06s ease, box-shadow .2s ease;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, .15);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+        }
+
+        button.primary {
+            background: var(--accent);
+            color: #1f2937;
+        }
+
+        button.secondary,
+        a.btn {
+            background: #111827;
+            color: #fff;
+        }
+
+        button:active,
+        a.btn:active {
+            transform: translateY(1px) scale(.99);
+        }
+
+        /* Emoji burst */
+        .burst {
+            position: relative;
+        }
+
+        .particle {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-size: clamp(18px, 4vw, 28px);
+            animation: pop 900ms ease-out forwards;
+            pointer-events: none;
+            will-change: transform, opacity;
+        }
+
+        @keyframes pop {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(0.8)
+            }
+
+            80% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(1.4)
+            }
+        }
+
+        .foot {
+            margin-top: 24px;
+            font-size: 14px;
+            color: var(--muted)
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            background: #eef2ff;
+            color: #3730a3;
+            font-weight: 700;
+            font-size: 12px
+        }
+
+        .en {
+            opacity: .85;
+            font-size: clamp(14px, 2.5vw, 18px)
+        }
+    </style>
+</head>
+
+<body>
+    <main class="card">
+        <div class="badge">Greeting • শুভেচ্ছা Ashi to Shila</div>
+        <h1 id="title" class="title">শুভ সকাল! ☀️</h1>
+        <p id="subtitle" class="subtitle">তোমার দিনটা হোক হাসিখুশি আর সফলতায় ভরা।</p>
+        <div id="clock" class="clock">--:--:--</div>
+        <div class="en" id="enLine">Good Morning!</div>
+
+        <div class="actions">
+            <button id="sayBtn" class="primary burst">Say “শুভ সকাল”</button>
+            <button id="copyBtn" class="secondary">Copy Message</button>
+            <a id="waBtn" class="btn" href="#" target="_blank" rel="noopener">Share on WhatsApp</a>
+        </div>
+        <div>Design By - Ashik </div>
+
+    </main>
+
+    <script>
+        const titleEl = document.getElementById('title');
+        const subtitleEl = document.getElementById('subtitle');
+        const clockEl = document.getElementById('clock');
+        const enLine = document.getElementById('enLine');
+        const sayBtn = document.getElementById('sayBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const waBtn = document.getElementById('waBtn');
+
+        function getGreeting(date) {
+            const h = date.getHours();
+            if (h >= 5 && h < 12) return { bn: 'শুভ সকাল! ☀️', en: 'Good Morning!' };
+            if (h >= 12 && h < 17) return { bn: 'শুভ দুপুর! ☀️', en: 'Good Afternoon!' };
+            if (h >= 17 && h < 21) return { bn: 'শুভ সন্ধ্যা! 🌆', en: 'Good Evening!' };
+            return { bn: 'শুভ রাত্রি! 🌙', en: 'Good Night!' };
+        }
+
+        function updateUI() {
+            const now = new Date();
+            const { bn, en } = getGreeting(now);
+            titleEl.textContent = bn;
+            enLine.textContent = en;
+            clockEl.textContent = now.toLocaleTimeString([], { hour12: true });
+            subtitleEl.textContent = bn.includes('সকাল')
+                ? 'তোমার দিনটা হোক হাসিখুশি আর সফলতায় ভরা।'
+                : bn.includes('দুপুর')
+                    ? 'মাঝদুপুরটা কাটুক প্রাণখোলা উচ্ছ্বাসে।'
+                    : bn.includes('সন্ধ্যা')
+                        ? 'সন্ধ্যাটা কাটুক শান্তি আর ভালোবাসায়।'
+                        : 'রাত্রিটা হোক আরামদায়ক ও নিরাপদ।';
+
+            const msg = `${bn} ${en} — সময়: ${now.toLocaleTimeString([], { hour12: true })}`;
+            waBtn.href = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+            waBtn.title = 'Share on WhatsApp';
+        }
+
+        // Emoji burst on click
+        const EMOJIS = ['☀️', '✨', '🌼', '🌸', '💫', '😊', '🌞', '🎉'];
+        function burst(el) {
+            for (let i = 0; i < 14; i++) {
+                const span = document.createElement('span');
+                span.className = 'particle';
+                span.textContent = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+                const angle = (Math.PI * 2) * (i / 14) + (Math.random() * 0.3);
+                const dist = 80 + Math.random() * 60; // px
+                const tx = Math.cos(angle) * dist;
+                const ty = Math.sin(angle) * dist * (Math.random() > .5 ? -1 : 1);
+                span.style.setProperty('--tx', `${tx}px`);
+                span.style.setProperty('--ty', `${ty}px`);
+                el.appendChild(span);
+                setTimeout(() => span.remove(), 900);
+            }
+        }
+
+        sayBtn.addEventListener('click', () => {
+            burst(sayBtn);
+            const { bn } = getGreeting(new Date());
+            // Optional voice (if available)
+            try {
+                const u = new SpeechSynthesisUtterance(bn);
+                speechSynthesis.cancel();
+                speechSynthesis.speak(u);
+            } catch (_) { }
+        });
+
+        copyBtn.addEventListener('click', async () => {
+            const now = new Date();
+            const { bn, en } = getGreeting(now);
+            const text = `${bn} ${en}`;
+            try {
+                await navigator.clipboard.writeText(text);
+                copyBtn.textContent = 'Copied ✅';
+                setTimeout(() => copyBtn.textContent = 'Copy Message', 1400);
+            } catch (e) {
+                copyBtn.textContent = 'Copy failed';
+                setTimeout(() => updateUI(), 1200);
+            }
+        });
+
+        // Start
+        updateUI();
+        setInterval(updateUI, 1000);
+    </script>
+</body>
+
+</html>
